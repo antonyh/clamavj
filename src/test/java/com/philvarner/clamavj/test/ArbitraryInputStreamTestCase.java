@@ -17,7 +17,7 @@ public class ArbitraryInputStreamTestCase {
         byte[] bytes = new byte[SIZE];
         assertEquals(SIZE, is.read(bytes, 0, SIZE));
         for (byte b : bytes) assertEquals(b, 1);
-
+        is.close();
     }
 
     @Test
@@ -29,7 +29,7 @@ public class ArbitraryInputStreamTestCase {
         assertEquals(100, is.read(bytes, 0, 100));
         for (int i = 0; i < 100 ; i++) assertEquals(bytes[i], 1);
         for (int i = 100; i < 1000 ; i++) assertEquals(bytes[i], 0);
-
+        is.close();
     }
 
     @Test
@@ -40,7 +40,7 @@ public class ArbitraryInputStreamTestCase {
 
         byte[] bytes = new byte[SIZE];
         assertEquals(SIZE, is.read(bytes, 0, SIZE));
-
+        is.close();
     }
 
     @Test
@@ -52,13 +52,16 @@ public class ArbitraryInputStreamTestCase {
         byte[] bytes = new byte[SIZE*10];
         assertEquals(SIZE, is.read(bytes, 0, SIZE));
         assertEquals(SIZE+1, is.read(bytes, 0, SIZE+1));
-
+        is.close();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void test_overflow() throws Exception {
         int SIZE = 100;
-        assertEquals(SIZE, new ArbitraryInputStream(SIZE).read(new byte[SIZE], 1, SIZE+1));
+
+        ArbitraryInputStream is = new ArbitraryInputStream(SIZE);
+        assertEquals(SIZE, is.read(new byte[SIZE], 1, SIZE+1));
+        is.close();
     }
 
     @Test
@@ -68,6 +71,7 @@ public class ArbitraryInputStreamTestCase {
         is.read(new byte[SIZE], 0, SIZE);
 
         assertEquals(-1, is.read(new byte[SIZE], 0, 1));
+        is.close();
     }
 
 }
